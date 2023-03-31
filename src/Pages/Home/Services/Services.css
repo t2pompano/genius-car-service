@@ -1,0 +1,29 @@
+/* .services-title {
+    /* text-align: center; */
+/* margin: 50px 20px;
+    color: rgb(0, 0, 6);
+}
+ */
+
+.services-container {
+    background: linear-gradient(45deg, rgb(27, 1, 1) 0 30%, rgb(18, 0, 21) 50% 100%);
+    color: aliceblue;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+}
+
+/*make services responsive*/
+
+@media only screen and (max-width: 576px) {
+    .services-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media only screen and (min-width:577px) and (max-width:992px) {
+    .services-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
