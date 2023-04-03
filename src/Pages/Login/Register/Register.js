@@ -20,6 +20,10 @@ const Register = () => {
         navigate('/login');
     }
 
+    if (user) {
+        navigate('/home');
+    }
+
     const handleRegister = event => {
         event.preventDefault();
         const name = event.target.name.value;
@@ -27,7 +31,6 @@ const Register = () => {
         const password = event.target.password.value;
 
         createUserWithEmailAndPassword(email, password);
-        console.log(email, password);
     }
 
     return (

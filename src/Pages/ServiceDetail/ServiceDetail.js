@@ -24,6 +24,8 @@ const ServiceDetail = () => {
                         <button className='btn btn-primary btn-sm' onClick={() => navigate(-1)}>BACK</button> &nbsp;
                         <button className='btn btn-primary btn-sm' onClick={() => navigate('/')}>Navigate to Home</button> &nbsp;
                         <Link to='/' className='btn btn-primary btn-sm'>Home</Link>
+                        <br />
+                        <Link to='/checkout' className='btn btn-danger mt-5 btn-sm'>Proceed Check-Out</Link>
 
                     </div>
                 </div>
