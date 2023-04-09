@@ -1,36 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
+import SocialLogin from '../Social.Login/SocialLogin';
+import Loading from '../../Shareed/Loading/Loading';
 
 
 
 const Register = () => {
+    const [agree, setAgree] = useState(false);
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-    ] = useCreateUserWithEmailAndPassword(auth);
+    ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
     const navigate = useNavigate();
 
     const navigateLogin = () => {
         navigate('/login');
     }
-
-    if (user) {
-        navigate('/home');
+    if (loading, updating) {
+        return <Loading></Loading>
     }
 
-    const handleRegister = event => {
+    // if (user) {
+    //     navigate('/home');
+    // }
+    if (user) {
+        console.log(user);
+    }
+
+    const handleRegister = async (event) => {
         event.preventDefault();
         const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
+        // const agree = event.target.terms.checked;
 
-        createUserWithEmailAndPassword(email, password);
+        await createUserWithEmailAndPassword(email, password);
+        const success = await updateProfile({ displayName: name });
+        if (success) {
+            alert('Updated profile');
+            navigate('/home');
+        }
     }
 
     return (
@@ -42,9 +58,18 @@ const Register = () => {
                 <input type="email" name="email" id="" placeholder='Email Address' required />
 
                 <input type="password" name="password" id="" placeholder='your password' required />
-                <input type="submit" value="Register" />
+                <input onClick={() => setAgree(!agree)} type="checkbox" name="terms" id="terms" />
+                {/* <label className={agree ? "ps-2 text-primary" : "ps-2 text-danger"} htmlFor="terms">Accept Genius Car Terms and Conditions</label> */}
+                <label className={`ps-2 ${agree ? '' : 'text-danger'}`} htmlFor="terms">Accept Genius Car Terms and Conditions</label>
+                <input
+                    disabled={!agree}
+                    className='btn btn-warning w-50 mx-auto d-block rounded-pill mt-3'
+                    type="submit"
+                    value="Register" />
             </form>
-            <p>Already have an accounnt ?<Link to='/login' className='text-danger text-decoration-none'> <b onClick={navigateLogin}>Please LogIn</b></Link></p>
+            <p>Already have an accounnt ?<Link to='/login' className='text-primary text-decoration-none'> <b onClick={navigateLogin}>Please LogIn</b></Link></p>
+
+            <SocialLogin></SocialLogin>
         </div>
     );
 };
